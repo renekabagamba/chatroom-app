@@ -1,6 +1,6 @@
 # chatroom-app
 
-Foundations of Software Engineering 
+Foundations of Software Engineering - 
 Chatroom Assignment
 
 Implement a simple FSE Chat Room application. The system should allow a user to:
