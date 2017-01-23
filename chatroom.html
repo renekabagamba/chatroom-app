@@ -1,0 +1,88 @@
+<html>
+	<head>
+		<title>FSE Chat Room</title>
+
+		<script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+		<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+		integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+		integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+		integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+		crossorigin="anonymous"></script>
+
+	</head>
+
+	<body>
+
+		<div class="row">
+					<div class="col-md-4">&nbsp;</div>
+					<div class="col-md-1">&nbsp;</div>
+					<div class="col-md-3">
+						<div class="panel panel-primary">
+							<div class="panel-heading">
+								<div style="float:left"><h3 class="panel-title">FSE Chat Room</span></h3></div>&nbsp;
+								<div style="float:right"><a href="/" style="color:#fff"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span></a></div>
+							</div>
+							<div class="panel-body">
+								<div id="content">
+									<div class="list-group" style="height:320px; overflow: auto;" id="content-chats">
+									</div>
+										<p><input type="text" style="height:100px;" class="form-control" placeholder="Type Message" id="m">
+										</p></div>
+									<div class="jumbotron">
+										<p style="text-align: center;"><a href="#" id="post-chat" class="btn btn-primary" role="button">POST</a></p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-1">&nbsp;</div>
+					<div class="col-md-4">&nbsp;</div>
+				</div>
+
+				<p2 id ='log'>Print username<p2>
+
+		<script src="/socket.io/socket.io.js"></script>
+		
+		<script type="text/javascript">
+
+				var socket = io();
+
+				var myParagraph = document.getElementById("log");
+				myParagraph.innerHTML = document.cookie;
+
+				$('#post-chat').click(function(){
+					var msg = '{"msg" : "' + $('#m').val() + '","username" : "' + retrieveUsername(document.cookie) + '"}';
+					myParagraph.innerHTML = msg;
+					socket.emit('chat message', msg);
+					$('#m').val('');
+					return false;
+				});
+
+				socket.on('chat message', function(msg){
+						var newMessage = formChatMessage(msg);
+						$('#content-chats').append(newMessage);
+				  });
+
+				function retrieveUsername(cookie){
+					var username = cookie.split('=')[1];
+					return username;
+				   };
+
+
+				function formChatMessage(msg){              
+					var newMessage = [  '<a href="#" class="list-group-item">',
+						'<div style="float:left; color:blue;"><h6><strong>' + msg.username + '</strong></h6></div>&nbsp;',
+						'<div style="float:right ; color:blue;"><h6><strong>' + msg.timestamp + '</strong></h6></div>',
+						'<div>&nbsp;</div>',
+						'<div>'+ msg.msg + '</div></a>' ].join("\n");
+					return newMessage;
+				}
+			</script>
+		
+				
+	</body>
+<html>
